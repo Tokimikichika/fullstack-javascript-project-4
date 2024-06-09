@@ -4,5 +4,26 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/739d00620f4cb44fc983/test_coverage)](https://codeclimate.com/github/Tokimikichika/fullstack-javascript-project-4/test_coverage)
 
 
-test and lesson 1
+
+## Installation
+
+To install clone the project in the desired folder
+```sh
+git clone git@github.com:Tokimikichika/fullstack-javascript-project-4.git
+```
+
+Install
+```sh
+make install
+```
+To use CLI -> link the project in the system
+
+```sh
+make link
+```
+
+test
 https://asciinema.org/a/656975
+
+
+https://asciinema.org/a/svEQlxiOPVqZkFhtYHxecs4li
