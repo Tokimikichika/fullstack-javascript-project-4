@@ -33,7 +33,7 @@ export const extractAssets = (data, pageUrl, dirName) => {
   const $ = cheerio.load(data);
   const assets = Object.entries(tagsAttributes)
     .flatMap(([tagName, attribute]) => $(`${tagName}[${attribute}]`)
-      .toArray() 
+      .toArray()
       .map((element) => {
         const $element = $(element);
         const src = $element.attr(attribute);

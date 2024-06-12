@@ -3,3 +3,4 @@
 import startPageloader from '../src/cli.js';
 
 startPageloader();
+

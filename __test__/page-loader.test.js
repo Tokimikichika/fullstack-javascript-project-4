@@ -23,13 +23,12 @@ beforeEach(async () => {
 
 test('page-loader', async () => {
   const resBefore = await fsp.readFile(
-    path.join('.', '__fixtures__', 'before-ru-hexlet-io-courses.html'), 'utf-8',
+    path.join('.', '__fixtures__', 'before-ru-hexlet-io-courses.html'), 'utf-8'
   );
 
   const resAfter = await fsp.readFile(
-    path.join('.', '__fixtures__', 'ru-hexlet-io-courses.html'), 'utf-8',
+    path.join('.', '__fixtures__', 'ru-hexlet-io-courses.html'), 'utf-8'
   );
-  
 
   nock('https://ru.hexlet.io')
     .get('/courses')
@@ -41,21 +40,19 @@ test('page-loader', async () => {
     .get('/packs/js/runtime.js')
     .reply(200, 'runtime.js')
     .get('/assets/professions/nodejs.png')
-    .reply(200, 'nodejs.png');  
-    
+    .reply(200, 'nodejs.png');
 
   await pageLoader(url, outputDir);
 
   const dataBody = await fsp.readFile(
     path.join(outputDir, 'ru-hexlet-io-courses.html'),
-    'utf-8',
+    'utf-8'
   );
 
   const prettierResult = await prettier.format(dataBody, { parser: 'html' });
   const prettierAfter = await prettier.format(resAfter, { parser: 'html' });
 
   expect(prettierResult).toEqual(prettierAfter);
- 
 });
 
 test('error', async () => {
@@ -67,18 +64,17 @@ test('error', async () => {
     .reply(404, await fsp.readFile(getFixturePath('nodejs.png')));
   await expect(pageLoader('https://ru.hexlet.io/courses', '/usr')).rejects.toThrow(new Error('Request failed with status code 404'));
 });
-  
+
 test('parsing error', async () => {
   nock('https://ru.hexlet.io')
     .get('/courses')
     .reply(200, await fsp.readFile(getFixturePath('expected.json'), 'utf-8'));
   await expect(pageLoader('https://ru.hexlet.io/courses', outputDir)).not.toBeNull();
 });
-  
+
 test('dir read error', async () => {
   nock('https://ru.hexlet.io')
     .get('/courses')
     .reply(200, await fsp.readFile(getFixturePath('test1.html'), 'utf-8'));
   await expect(pageLoader('https://ru.hexlet.io/courses', '/sys')).rejects.toThrow(new Error('EACCES: permission denied, mkdir \'/sys/ru-hexlet-io-courses_files\''));
 });
-  
