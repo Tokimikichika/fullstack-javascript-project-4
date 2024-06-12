@@ -22,13 +22,9 @@ beforeEach(async () => {
 });
 
 test('page-loader', async () => {
-  const resBefore = await fsp.readFile(
-    path.join('.', '__fixtures__', 'before-ru-hexlet-io-courses.html'), 'utf-8'
-  );
+  const resBefore = await fsp.readFile(path.join('.', '__fixtures__', 'before-ru-hexlet-io-courses.html'), 'utf-8');
 
-  const resAfter = await fsp.readFile(
-    path.join('.', '__fixtures__', 'ru-hexlet-io-courses.html'), 'utf-8'
-  );
+  const resAfter = await fsp.readFile(path.join('.', '__fixtures__', 'ru-hexlet-io-courses.html'), 'utf-8');
 
   nock('https://ru.hexlet.io')
     .get('/courses')
@@ -44,10 +40,7 @@ test('page-loader', async () => {
 
   await pageLoader(url, outputDir);
 
-  const dataBody = await fsp.readFile(
-    path.join(outputDir, 'ru-hexlet-io-courses.html'),
-    'utf-8'
-  );
+  const dataBody = await fsp.readFile(path.join(outputDir, 'ru-hexlet-io-courses.html'), 'utf-8');
 
   const prettierResult = await prettier.format(dataBody, { parser: 'html' });
   const prettierAfter = await prettier.format(resAfter, { parser: 'html' });

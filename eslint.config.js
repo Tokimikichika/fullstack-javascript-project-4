@@ -8,7 +8,7 @@ export default [
       globals: {
         console: 'readonly',
         process: 'readonly',
-        URL: 'readonly', 
+        URL: 'readonly',
       },
       ecmaVersion: 2021,
       sourceType: 'module',
@@ -21,7 +21,7 @@ export default [
     },
   },
   {
-    files: ['**/__test__/**/*.js'], 
+    files: ['**/__test__/**/*.js'],
     languageOptions: {
       globals: {
         beforeEach: 'readonly',
