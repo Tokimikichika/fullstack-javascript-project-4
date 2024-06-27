@@ -14,46 +14,44 @@ import {
 
 const log = debug('page-loader');
 
-const pageloader = (url, outputassetsDirPath = '') => {
-  log(`Page loader has started with url: ${url}, outputassetsDirPath: ${outputassetsDirPath}`);
-  const pageUrl = new URL(url);
-  const htmlPageFileName = getFilename(pageUrl);
-  const htmlPagePath = path.join(outputassetsDirPath, htmlPageFileName);
-  const assetsDirName = getDirname(pageUrl);
-  const assetsDirPath = path.join(outputassetsDirPath, assetsDirName);
+const pageLoader = async (url, outputassetsDirPath = process.cwd()) => {
+  try {
+    log(`Page loader has started with url: ${url}, outputassetsDirPath: ${outputassetsDirPath}`);
+    const pageUrl = new URL(url);
+    const htmlPageFileName = getFilename(pageUrl);
+    const htmlPagePath = path.join(outputassetsDirPath, htmlPageFileName);
+    const assetsDirName = getDirname(pageUrl);
+    const assetsDirPath = path.join(outputassetsDirPath, assetsDirName);
 
-  return axios.get(url)
-    .then(({ data: html }) => {
-      log(`Assets directory path: '${assetsDirPath}'`);
+    const { data: html } = await axios.get(url);
+    log(`Assets directory path: '${assetsDirPath}'`);
+    await hasDir(html, assetsDirPath);
 
-      return hasDir(html, assetsDirPath);
-    })
-    .then((html) => {
-      log('Extracting assets...');
+    log('Extracting assets...');
+    const extractedData = await extractAssets(html, pageUrl, assetsDirName);
+    const { html: newHtml, assets } = extractedData;
 
-      return extractAssets(html, pageUrl, assetsDirName);
-    })
-    .then(({ html, assets }) => {
-      log(`HTML page path: '${htmlPagePath}'`);
+    log(`HTML page path: '${htmlPagePath}'`);
+    await writeAssets(newHtml, assets, htmlPagePath);
 
-      return writeAssets(html, assets, htmlPagePath);
-    })
-    .then((assets) => {
-      const tasks = assets.map(({ assetUrl, name }) => {
-        const assetPath = path.resolve(assetsDirPath, name);
+    const tasks = assets.map(({ assetUrl, name }) => {
+      const assetPath = path.resolve(assetsDirPath, name);
 
-        return {
-          title: `Downloading asset: ${assetUrl.toString()}`,
-          task: () => downloadAsset(assetUrl.toString(), assetPath)
-            .catch(() => {}),
-        };
-      });
+      return {
+        title: `Downloading asset: ${assetUrl.toString()}`,
+        task: () => downloadAsset(assetUrl.toString(), assetPath)
+          .catch(() => {}),
+      };
+    });
 
-      const listr = new Listr(tasks, { concurrent: true });
+    const listr = new Listr(tasks, { concurrent: true });
+    await listr.run();
 
-      return listr.run();
-    })
-    .then(() => htmlPagePath);
+    console.log(`Page has been downloaded to: ${htmlPagePath}`);
+  } catch (error) {
+    log(`Error occurred: ${error.message}`);
+    process.exit(1);
+  }
 };
 
-export default pageloader;
+export default pageLoader;

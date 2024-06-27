@@ -13,9 +13,13 @@ function startPageloader() {
       console.log(program.help());
       process.exit(0);
     })
-    .option('-o, --output [dir]', `(default: "${process.cwd()}")`, process.cwd())
-    .action((url, options) => {
-      console.log(pageLoader(url, options.output));
+    .option('-o, --output [dir]', `(default: "${process.cwd()}")`)
+    .action(async (url, options) => {
+      try {
+        await pageLoader(url, options.output);
+      } catch (error) {
+        console.error('An error occurred:', error.message);
+      }
     })
     .parse();
 }

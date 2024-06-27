@@ -3,7 +3,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/739d00620f4cb44fc983/maintainability)](https://codeclimate.com/github/Tokimikichika/fullstack-javascript-project-4/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/739d00620f4cb44fc983/test_coverage)](https://codeclimate.com/github/Tokimikichika/fullstack-javascript-project-4/test_coverage)
 
-
+##Эта утилиту командной строки page-loader, которая скачивает страницу из сети и кладёт в указанную директорию (по умолчанию в директорию запуска программы)
 
 ## Installation
 
