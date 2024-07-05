@@ -19,6 +19,7 @@ function startPageloader() {
         await pageLoader(url, options.output);
       } catch (error) {
         console.error('An error occurred:', error.message);
+        process.exit(1);
       }
     })
     .parse();
