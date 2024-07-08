@@ -50,7 +50,7 @@ const pageLoader = async (url, outputassetsDirPath = process.cwd()) => {
     console.log(`Page has been downloaded to: ${htmlPagePath}`);
   } catch (error) {
     log(`Error occurred: ${error.message}`);
-    process.exit(1);
+    throw error;
   }
 };
 
